@@ -13,8 +13,31 @@ class MyClient(discord.Client):
         if message.author == self.user:
             return
 
+
+        catigories = ["all", "vr", "tech",
+                      "pc", "xboxone", "xboxsx",
+                      "ps4", "ps5", "stadia",
+                      "nintendo", "mmo", "mobile",
+                      "social", "fun", "industry",
+                      "cybersport", "movies"]
+
+        url_catigory = ["", "vr", "hard",
+                        "pc", "xone", "xboxsx",
+                        "ps4", "ps5", "stadia",
+                        "nintendo_switch", "mmo", "mobile",
+                        "social", "fun", "industry",
+                        "cybersport", "movies"]
+
+
+        for i in range(len(catigories)):
+            if message.content.startswith(f"!news-{catigories[i]}"):
+                url = "https://stopgame.ru/news/" + url_catigory[i]
+                break
+            else:
+                continue
+
+
         if message.content.startswith('!news'):
-            url = "https://stopgame.ru/news"
             response = requests.get(url)
             text = response.text
             data = BeautifulSoup(text, 'html.parser')
@@ -29,6 +52,13 @@ class MyClient(discord.Client):
                 temp_response = headings[i]['href']
                 response_text += "https://stopgame.ru" + temp_response + "\n"
             await message.channel.send(response_text)
+        elif message.content.startswith('!help'):
+            response_text = "Список команд: \n"
+
+            for i in range(len(catigories)):
+                response_text += f"!news-{catigories[i]}" + "\n"
+            await message.channel.send(response_text)
+
 
 client = MyClient(intents=intents)
-client.run('token')
+client.run('MTE0MTYwODUxODg1Njc0NTAyMQ.GPT2qT.6A7oL9byHAu-A5advg98ushoTk4hSTxcK_cVU4')
