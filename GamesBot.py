@@ -14,8 +14,8 @@ class MyClient(discord.Client):
             return
 
 
-        catigories = ["all", "vr", "tech",
-                      "pc", "xboxone", "xboxsx",
+        catigories = ["all", "vr", "hard",
+                      "pc", "xone", "xboxsx",
                       "ps4", "ps5", "stadia",
                       "nintendo", "mmo", "mobile",
                       "social", "fun", "industry",
@@ -28,6 +28,8 @@ class MyClient(discord.Client):
                         "social", "fun", "industry",
                         "cybersport", "movies"]
 
+
+        url = "https://stopgame.ru/news/"
 
         for i in range(len(catigories)):
             if message.content.startswith(f"!news-{catigories[i]}"):
@@ -53,7 +55,7 @@ class MyClient(discord.Client):
                 response_text += "https://stopgame.ru" + temp_response + "\n"
             await message.channel.send(response_text)
         elif message.content.startswith('!help'):
-            response_text = "Список команд: \n"
+            response_text = "Список команд: \n!help \n"
 
             for i in range(len(catigories)):
                 response_text += f"!news-{catigories[i]}" + "\n"
