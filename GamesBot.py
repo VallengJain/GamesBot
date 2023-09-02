@@ -12,8 +12,11 @@ class MyClient(discord.Client):
     async def on_message(self, message):
         if message.author == self.user:
             return
+        
+        url_news = "https://stopgame.ru/news/"
+        url_games = "https://stopgame.ru/games/"
 
-
+#Вывод новстей
         catigories = ["all", "vr", "hard",
                       "pc", "xone", "xboxsx",
                       "ps4", "ps5", "stadia",
@@ -29,29 +32,27 @@ class MyClient(discord.Client):
                         "cybersport", "movies"]
 
 
-        url = "https://stopgame.ru/news/"
-
         for i in range(len(catigories)):
             if message.content.startswith(f"!news-{catigories[i]}"):
-                url = "https://stopgame.ru/news/" + url_catigory[i]
+                url_news = "https://stopgame.ru/news/" + url_catigory[i]
                 break
             else:
                 continue
 
 
         if message.content.startswith('!news'):
-            response = requests.get(url)
-            text = response.text
-            data = BeautifulSoup(text, 'html.parser')
+            response_news = requests.get(url_news)
+            text_news = response_news.text
+            data_news = BeautifulSoup(text_news, 'html.parser')
 
-            headings_list_view = data.find('div', class_='list-view')
-            headings = headings_list_view.find_all('a', class_ ='_title_1tbpr_49')
+            headings_list_view = data_news.find('div', class_ = 'list-view')
+            headings_news = headings_list_view.find_all('a', class_ ='_title_1tbpr_49')
 
-            headings = headings[:3]
+            headings_news = headings_news[:3]
             response_text = "Новости: \n"
 
-            for i in range(len(headings)):
-                temp_response = headings[i]['href']
+            for i in range(len(headings_news)):
+                temp_response = headings_news[i]['href']
                 response_text += "https://stopgame.ru" + temp_response + "\n"
             await message.channel.send(response_text)
         elif message.content.startswith('!help'):
@@ -60,6 +61,22 @@ class MyClient(discord.Client):
             for i in range(len(catigories)):
                 response_text += f"!news-{catigories[i]}" + "\n"
             await message.channel.send(response_text)
+#Вывод игр
+        elif message.content.startswith('!games'):
+            response_games = requests.get(url_games)
+            text_games = response_games.text
+            data_games = BeautifulSoup(text_games, 'html.parser')
+
+            headings_games_list = data_games.find('div', class_ = '_main-grid_zxw47_315')
+            headings_games = headings_games_list.find_all('a', class_ = '_card_1vde2_1')
+
+            headings_games = headings_games[:5]
+            response_text = "Игры: \n"
+
+            for i in range(len(headings_games)):
+                temp_response = headings_games[i]['href']
+                response_text += "https://stopgame.ru" + temp_response + "\n"
+            await message.channel.send(response_text)         
 
 
 client = MyClient(intents=intents)
