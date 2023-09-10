@@ -55,6 +55,7 @@ class MyClient(discord.Client):
                 temp_response = headings_news[i]['href']
                 response_text += "https://stopgame.ru" + temp_response + "\n"
             await message.channel.send(response_text)
+#Вывод списка комманд
         elif message.content.startswith('!help'):
             response_text = "Список команд: \n!help \n"
 
@@ -68,13 +69,22 @@ class MyClient(discord.Client):
             data_games = BeautifulSoup(text_games, 'html.parser')
 
             headings_games_list = data_games.find('div', class_ = '_main-grid_zxw47_315')
-            headings_games = headings_games_list.find_all('a', class_ = '_card_1vde2_1')
+            headings_all_games = headings_games_list.find_all('div', class_ = '_main-block_zxw47_321')
 
-            headings_games = headings_games[:5]
+            if message.content.startswith('!games-AAA') or message.content.startswith('!games-aaa'):
+                for i in range(len(headings_all_games)):
+                    if 'ААА ждём' in headings_all_games[i].text:
+                        headings_games = headings_all_games[i]
+                        break
+                    else:
+                        continue
+
+            games = headings_games.find_all('a', class_ = '_card_1vde2_1')
+            games = games[:3]
             response_text = "Игры: \n"
 
-            for i in range(len(headings_games)):
-                temp_response = headings_games[i]['href']
+            for i in range(len(games)):
+                temp_response = games[i]['href']
                 response_text += "https://stopgame.ru" + temp_response + "\n"
             await message.channel.send(response_text)         
 
