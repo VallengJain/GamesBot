@@ -78,6 +78,13 @@ class MyClient(discord.Client):
                         break
                     else:
                         continue
+            elif message.content.startswith('!games-spotlight'):
+                for i in range(len(headings_all_games)):
+                    if 'В центре внимания' in headings_all_games[i].text:
+                        headings_games = headings_all_games[i]
+                        break
+                    else:
+                        continue
 
             games = headings_games.find_all('a', class_ = '_card_1vde2_1')
             games = games[:3]
